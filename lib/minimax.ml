@@ -35,6 +35,7 @@ let min_of_list ~le = max_of_list ~le:(Fun.flip le)
     most [max_depth] (default: [10]) layers deep. *)
 let minimax ?(max_depth = 10) ?(player = Us) board =
   (* Returns the best [(color, score)] for player [p] to make *)
+  if max_depth < 1 then invalid_arg "minimax requires max_depth >= 1";
   let rec go fuel b p : Color.t * float =
     assert (fuel >= 0);
     let us_c = get_corner b Us in
@@ -64,5 +65,4 @@ let minimax ?(max_depth = 10) ?(player = Us) board =
     | Us -> max_of_list ~le moves_and_scores
     | Opp -> min_of_list ~le moves_and_scores
   in
-
-  go max_depth board player
+  go (max_depth-1) board player
